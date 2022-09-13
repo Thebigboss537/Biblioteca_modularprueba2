@@ -3,16 +3,12 @@ using Biblioteca_modular.Data;
 using Biblioteca_modular.Models;
 using Biblioteca_modular.Models.Dto;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
 namespace Biblioteca_modular.Repositorio
 {
     public class UsuarioRepositorio : IUsuarioRepositorio
     {
-        /*private readonly DataContext _db;
+        private readonly DataContext _db;
         private IMapper _mapper;
         private readonly IConfiguration _configuration;
         public UsuarioRepositorio(DataContext db, IMapper mapper, IConfiguration configuration)
@@ -25,16 +21,19 @@ namespace Biblioteca_modular.Repositorio
         public async Task<UsuarioDto> CreateUpdate(UsuarioDto usuarioDto)
         {
             Usuario usuario = _mapper.Map<UsuarioDto, Usuario>(usuarioDto);
-            
+
             if (usuario.Id_usuario > 0)
             {
-                var a = _db.Usuarios.AsNoTracking().Where(e => e.Cedula == usuarioDto.Cedula).FirstOrDefault();
-                usuario.PasswordHash = a.PasswordHash;
-                usuario.PasswordSalt = a.PasswordSalt;
+                usuario.Id_usuario = Convert.ToInt32(_db.Usuarios_autenticacion.FirstOrDefault(e => e.Username == usuario.Cedula).Id_usuario_autenticacion);
                 _db.Usuarios.Update(usuario);
             }
             else
             {
+                Usuario_autenticacion usuario_autenticacion = new Usuario_autenticacion { Username = usuarioDto.Cedula };
+                usuario_autenticacion.Id_rol = 3;
+                await _db.Usuarios_autenticacion.AddAsync(usuario_autenticacion);
+                await _db.SaveChangesAsync();
+                usuario.Id_usuario = usuario_autenticacion.Id_usuario_autenticacion;
                 await _db.Usuarios.AddAsync(usuario);
             }
             await _db.SaveChangesAsync();
@@ -45,12 +44,12 @@ namespace Biblioteca_modular.Repositorio
         {
             try
             {
-                Usuario usuario = await _db.Usuarios.FindAsync(id);
-                if (usuario == null)
+                Usuario cliente = await _db.Usuarios.FindAsync(id);
+                if (cliente == null)
                 {
                     return false;
                 }
-                _db.Usuarios.Remove(usuario);
+                _db.Usuarios.Remove(cliente);
                 await _db.SaveChangesAsync();
 
                 return true;
@@ -63,42 +62,40 @@ namespace Biblioteca_modular.Repositorio
 
         public async Task<UsuarioDto> GetUsuarioById(int id)
         {
-            Usuario usuario  = await _db.Usuarios.FindAsync(id);
+            Usuario cliente = _db.Usuarios.Include(e => e.Programa_academico).FirstOrDefault(e => e.Id_usuario == id);
 
-            return _mapper.Map<UsuarioDto>(usuario);
+            return _mapper.Map<UsuarioDto>(cliente);
         }
 
         public async Task<List<UsuarioDto>> GetUsuarios()
         {
-            List<Usuario> lista = null;//esto se debe quitar
-            List<Usuario> lista = await _db.Usuarios.Include(e => e.Programa_academico).Include(e => e.Rol).ToListAsync();
+            List<Usuario> lista = await _db.Usuarios.Include(e => e.Programa_academico).ToListAsync();
 
-            var a = _mapper.Map<List<UsuarioDto>>(lista);
-
-            return a;
+            return _mapper.Map<List<UsuarioDto>>(lista);
         }
 
-        // TODO: Debería pertenecer a otro Módulo que no es usuario
         public async Task<List<Programa_academicoDto>> GetProgramas_academicos()
         {
             List<Programa_academico> lista = await _db.Programas_academicos.ToListAsync();
 
             return _mapper.Map<List<Programa_academicoDto>>(lista);
         }
-        public async Task<List<RolDto>> GetRoles()
+        
+        /*public async Task<List<RolDto>> GetRoles()
         {
             List<Rol> lista = await _db.Roles.ToListAsync();
 
             return _mapper.Map<List<RolDto>>(lista);
-        }
+        }*/
 
-        public async Task<string> Login(string Nombre_usuario, string password)
+        /*public async Task<string> Login(string Nombre_cliente, string password)
         {
-            var user = await _db.Usuarios.FirstOrDefaultAsync(x => x.Cedula.ToString().ToLower().Equals(Nombre_usuario.ToString().ToLower()));
+            
+            var user = await _db.Clientes.FirstOrDefaultAsync(x => x.Cedula.ToString().ToLower().Equals(Nombre_cliente.ToString().ToLower()));
 
             if (user == null)
             {
-                return "nouser";
+            return "nouser";
             }
             else if (!VerificarPasswordHash(password, user.PasswordHash, user.PasswordSalt))
             {
@@ -106,46 +103,46 @@ namespace Biblioteca_modular.Repositorio
             }
             else
             {
-               return CrearToken(user);
+              return CrearToken(user);
             }
-        }
+        }*/
 
-        public async Task<string> Register(Usuario usuario, string password)
+        /*public async Task<string> Register(Cliente cliente, string password)
         {
 
             try
             {
-                if (await UserExiste(usuario.Cedula.ToString()))
+                if (await UserExiste(cliente.Cedula.ToString()))
                 {
                     return "existe";
                 }
 
                 CrearPasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
-                usuario.PasswordHash = passwordHash;
-                usuario.PasswordSalt = passwordSalt;
-                usuario.id_rol = 2;
+                cliente.PasswordHash = passwordHash;
+                cliente.PasswordSalt = passwordSalt;
+                cliente.id_rol = 2;
 
-                await _db.Usuarios.AddAsync(usuario);
+                await _db.Clientes.AddAsync(cliente);
                 await _db.SaveChangesAsync();
-                return CrearToken(usuario);
+                return CrearToken(cliente);
             }
             catch (Exception ex)
             {
                 return "error";
             }
-        }
+        }*/
 
-        public async Task<bool> UserExiste(string Nombre_usuario)
+        /*public async Task<bool> UserExiste(string Nombre_cliente)
         {
-            if (await _db.Usuarios.AnyAsync(x => x.Cedula.ToString().ToLower().Equals(Nombre_usuario.ToLower())))
+            if (await _db.Clientes.AnyAsync(x => x.Cedula.ToString().ToLower().Equals(Nombre_cliente.ToLower())))
             {
                 return true;
             }
             return false;
-        }
+        }*/
 
 
-        private void CrearPasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        /*private void CrearPasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512())
             {
@@ -153,9 +150,9 @@ namespace Biblioteca_modular.Repositorio
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
 
             }
-        }
+        }*/
 
-        public bool VerificarPasswordHash(string password, byte[] passwordHash, byte[] passwrodSalt)
+        /*public bool VerificarPasswordHash(string password, byte[] passwordHash, byte[] passwrodSalt)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512(passwrodSalt))
             {
@@ -169,15 +166,15 @@ namespace Biblioteca_modular.Repositorio
                 }
                 return true;
             }
-        }
+        }*/
 
-        private string CrearToken(Usuario usuario)
+        /*private string CrearToken(Cliente cliente)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, usuario.Id_usuario.ToString()),
-                new Claim(ClaimTypes.Name, usuario.Cedula.ToString()),
-                new Claim(ClaimTypes.Role, usuario.Id_rol.ToString())
+                new Claim(ClaimTypes.NameIdentifier, cliente.Id_cliente.ToString()),
+                new Claim(ClaimTypes.Name, cliente.Cedula.ToString()),
+                new Claim(ClaimTypes.Role, cliente.id_rol.ToString())
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.
