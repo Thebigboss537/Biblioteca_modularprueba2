@@ -32,7 +32,7 @@ builder.Services.AddScoped<IPrograma_academicoRepositorio, Programa_academicoRep
 builder.Services.AddScoped<IReservaRepositorio, ReservaRepositorio>();
 builder.Services.AddScoped<IRolRepositorio, RolRepositorio>();
 builder.Services.AddScoped<ITipo_materialRepositorio, Tipo_materialRepositorio>();
-//builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
+builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
 builder.Services.AddScoped<IEditorialRepositorio, EditorialRepositorio>();
 builder.Services.AddScoped<ISedeRepositorio, SedeRepositorio>();
 builder.Services.AddScoped<ICategoriaRepositorio, CategoriaRepositorio>();
