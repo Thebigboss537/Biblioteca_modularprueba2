@@ -106,7 +106,7 @@ namespace Biblioteca_modular.Controllers
             }
         }
 
-        [HttpGet("crear")]
+        [HttpGet("crearusuario")]
         public async Task<ActionResult<IEnumerable<Usuario>>> Dropdownlist()
         {
             try
@@ -126,7 +126,7 @@ namespace Biblioteca_modular.Controllers
             return Ok(_response);
         }
 
-        [HttpPost("crear")]
+        [HttpPost("crearusuario")]
         public async Task<IActionResult> Crearusuario(UsuarioDto usuario)
         {
             try
