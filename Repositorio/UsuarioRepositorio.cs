@@ -33,7 +33,7 @@ namespace Biblioteca_modular.Repositorio
                 usuario_autenticacion.Id_rol = 3;
                 await _db.Usuarios_autenticacion.AddAsync(usuario_autenticacion);
                 await _db.SaveChangesAsync();
-                usuario.Id_usuario = usuario_autenticacion.Id_usuario_autenticacion;
+                usuario.Id_usuario_autenticacion = usuario_autenticacion.Id_usuario_autenticacion;
                 await _db.Usuarios.AddAsync(usuario);
             }
             await _db.SaveChangesAsync();

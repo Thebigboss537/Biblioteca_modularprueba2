@@ -4,7 +4,7 @@ namespace Biblioteca_modular.Models.Dto
 {
     public class UsuarioDto
     {
-        public int Id_cliente { get; set; }
+        public int Id_usuario { get; set; }
 
         public int Cedula { get; set; }
 
@@ -21,7 +21,7 @@ namespace Biblioteca_modular.Models.Dto
 
         public string Correo_electronico { get; set; }
 
-        public int? Id_usuario { get; set; }
-        public Usuario_autenticacion? Usuario { get; set; }
+        public int? Id_usuario_autenticacion { get; set; }
+        public Usuario_autenticacion? Usuario_autenticacion { get; set; }
     }
 }
