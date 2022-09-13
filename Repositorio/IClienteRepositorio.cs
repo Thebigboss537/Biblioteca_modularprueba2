@@ -5,10 +5,10 @@ namespace Biblioteca_modular.Repositorio
 {
     public interface IClienteRepositorio
     {
-        Task<List<ClienteDto>> GetClientes();
+        Task<List<UsuarioDto>> GetClientes();
         Task<List<Programa_academicoDto>> GetProgramas_academicos();
-        Task<ClienteDto> GetClienteById(int id);
-        Task<ClienteDto> CreateUpdate(ClienteDto clienteDto);
+        Task<UsuarioDto> GetClienteById(int id);
+        Task<UsuarioDto> CreateUpdate(UsuarioDto clienteDto);
         Task<bool> DeleteCliente(int id);
     }
 }

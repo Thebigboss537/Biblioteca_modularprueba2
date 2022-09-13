@@ -49,8 +49,8 @@ namespace Biblioteca_modular
                 config.CreateMap<Material_categoriaDto, Material_categoria>();
                 config.CreateMap<Material_categoria, Material_categoriaDto>();
 
-                config.CreateMap<ClienteDto, Cliente>();
-                config.CreateMap<Cliente, ClienteDto>();
+                config.CreateMap<UsuarioDto, Usuario>();
+                config.CreateMap<Usuario, UsuarioDto>();
 
                 config.CreateMap<MaterialDto, Material>().ForMember(m => m.Archivo, options => options.Ignore());
                 config.CreateMap<Material, MaterialDto>().ForMember(m => m.Archivo, options => options.Ignore());

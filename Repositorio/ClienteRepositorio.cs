@@ -18,38 +18,38 @@ namespace Biblioteca_modular.Repositorio
             _configuration = configuration;
         }
 
-        public async Task<ClienteDto> CreateUpdate(ClienteDto clienteDto)
+        public async Task<UsuarioDto> CreateUpdate(UsuarioDto usuarioDto)
         {
-            Cliente cliente = _mapper.Map<ClienteDto, Cliente>(clienteDto);
+            Usuario usuario = _mapper.Map<UsuarioDto, Usuario>(usuarioDto);
 
-            if (cliente.Id_cliente > 0)
+            if (usuario.Id_usuario > 0)
             {
-                cliente.Id_usuario = Convert.ToInt32(_db.Usuarios.FirstOrDefault(e => e.Username == cliente.Cedula).Id_usuario);
-                _db.Clientes.Update(cliente);
+                usuario.Id_usuario = Convert.ToInt32(_db.Usuarios_autenticacion.FirstOrDefault(e => e.Username == usuario.Cedula).Id_usuario_autenticacion);
+                _db.Usuarios.Update(usuario);
             }
             else
             {
-                Usuario usuario = new Usuario { Username = clienteDto.Cedula };
-                usuario.Id_rol = 3;
-                await _db.Usuarios.AddAsync(usuario);
+                Usuario_autenticacion usuario_autenticacion = new Usuario_autenticacion { Username = usuarioDto.Cedula };
+                usuario_autenticacion.Id_rol = 3;
+                await _db.Usuarios_autenticacion.AddAsync(usuario_autenticacion);
                 await _db.SaveChangesAsync();
-                cliente.Id_usuario = usuario.Id_usuario;
-                await _db.Clientes.AddAsync(cliente);
+                usuario.Id_usuario = usuario_autenticacion.Id_usuario_autenticacion;
+                await _db.Usuarios.AddAsync(usuario);
             }
             await _db.SaveChangesAsync();
-            return _mapper.Map<Cliente, ClienteDto>(cliente);
+            return _mapper.Map<Usuario, UsuarioDto>(usuario);
         }
 
         public async Task<bool> DeleteCliente(int id)
         {
             try
             {
-                Cliente cliente = await _db.Clientes.FindAsync(id);
+                Usuario cliente = await _db.Usuarios.FindAsync(id);
                 if (cliente == null)
                 {
                     return false;
                 }
-                _db.Clientes.Remove(cliente);
+                _db.Usuarios.Remove(cliente);
                 await _db.SaveChangesAsync();
 
                 return true;
@@ -60,18 +60,18 @@ namespace Biblioteca_modular.Repositorio
             }
         }
 
-        public async Task<ClienteDto> GetClienteById(int id)
+        public async Task<UsuarioDto> GetClienteById(int id)
         {
-            Cliente cliente = _db.Clientes.Include(e => e.Programa_academico).FirstOrDefault(e => e.Id_cliente == id);
+            Usuario cliente = _db.Usuarios.Include(e => e.Programa_academico).FirstOrDefault(e => e.Id_usuario == id);
 
-            return _mapper.Map<ClienteDto>(cliente);
+            return _mapper.Map<UsuarioDto>(cliente);
         }
 
-        public async Task<List<ClienteDto>> GetClientes()
+        public async Task<List<UsuarioDto>> GetClientes()
         {
-            List<Cliente> lista = await _db.Clientes.Include(e => e.Programa_academico).ToListAsync();
+            List<Usuario> lista = await _db.Usuarios.Include(e => e.Programa_academico).ToListAsync();
 
-            return _mapper.Map<List<ClienteDto>>(lista);
+            return _mapper.Map<List<UsuarioDto>>(lista);
         }
 
         public async Task<List<Programa_academicoDto>> GetProgramas_academicos()

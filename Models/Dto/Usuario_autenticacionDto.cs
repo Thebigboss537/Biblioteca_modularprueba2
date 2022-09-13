@@ -2,9 +2,9 @@
 
 namespace Biblioteca_modular.Models.Dto
 {
-    public class ClienteDto
+    public class Usuario_autenticacionDto
     {
-        public int Id_cliente { get; set; }
+        /*public int Id_usuario { get; set; }
 
         public int Cedula { get; set; }
 
@@ -21,7 +21,15 @@ namespace Biblioteca_modular.Models.Dto
 
         public string Correo_electronico { get; set; }
 
-        public int? Id_usuario { get; set; }
-        public Usuario? Usuario { get; set; }
+        public string ?Contraseña { get; set; }
+
+        public Estado ?Estado { get; set; }
+
+        public int id_rol { get; set; }
+        public Rol ?Rol { get; set; }
+
+        public Byte[] ?PasswordHash { get; set; }
+
+        public Byte[] ?PasswordSalt { get; set; }*/
     }
 }

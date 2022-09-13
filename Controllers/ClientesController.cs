@@ -27,7 +27,7 @@ namespace Biblioteca_modular.Controllers
         }
 
         [HttpGet("clientes")]
-        public async Task<ActionResult<IEnumerable<Cliente>>> GetClientes()
+        public async Task<ActionResult<IEnumerable<Usuario>>> GetClientes()
         {
             try
             {
@@ -45,7 +45,7 @@ namespace Biblioteca_modular.Controllers
         }
 
         [HttpGet("cliente/{id}")]
-        public async Task<ActionResult<Cliente>> GetCliente(int id)
+        public async Task<ActionResult<Usuario>> GetCliente(int id)
         {
             var cliente = await _clienteRepositorio.GetClienteById(id);
             if (cliente == null)
@@ -61,12 +61,12 @@ namespace Biblioteca_modular.Controllers
 
 
         [HttpPut("editarcliente/{id}")]
-        public async Task<IActionResult> PutCliente(int id, ClienteDto clienteDto)
+        public async Task<IActionResult> PutCliente(int id, UsuarioDto clienteDto)
         {
             try
             {
 
-                ClienteDto model = await _clienteRepositorio.CreateUpdate(clienteDto);
+                UsuarioDto model = await _clienteRepositorio.CreateUpdate(clienteDto);
                 _response.Result = model;
                 return Ok(_response);
             }
@@ -107,7 +107,7 @@ namespace Biblioteca_modular.Controllers
         }
 
         [HttpGet("crear")]
-        public async Task<ActionResult<IEnumerable<Cliente>>> Dropdownlist()
+        public async Task<ActionResult<IEnumerable<Usuario>>> Dropdownlist()
         {
             try
             {
@@ -127,11 +127,11 @@ namespace Biblioteca_modular.Controllers
         }
 
         [HttpPost("crear")]
-        public async Task<IActionResult> Crearcliente(ClienteDto usuario)
+        public async Task<IActionResult> Crearcliente(UsuarioDto usuario)
         {
             try
             {
-                ClienteDto model = await _clienteRepositorio.CreateUpdate(usuario);
+                UsuarioDto model = await _clienteRepositorio.CreateUpdate(usuario);
                 _response.Result = model;
                 return CreatedAtAction("GetCliente", new { id = model.Id_cliente }, _response);
             }

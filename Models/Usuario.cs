@@ -9,14 +9,31 @@ namespace Biblioteca_modular.Models
         [Key]
         public int Id_usuario { get; set; }
 
-        public int Username { get; set; }
+        [Required]
+        public int Cedula { get; set; }
 
-        public Byte[]? PasswordHash { get; set; }
+        [Required]
+        [StringLength(250)]
+        public string Nombre { get; set; }
 
-        public Byte[]? PasswordSalt { get; set; }
+        [Required]
+        [StringLength(250)]
+        public string Apellido { get; set; }
 
-        [ForeignKey("Rol")]
-        public int Id_rol { get; set; }
-        public Rol? Rol { get; set; }
+        [ForeignKey("Programa_academico")]
+        public int Id_programa_academico { get; set; }
+        public Programa_academico ?Programa_academico { get; set; }
+
+        [Required]
+        public string Telefono { get; set; }
+
+        public Semestre Semestre { get; set; }
+
+        [Required]
+        public string Correo_electronico { get; set; }
+
+        [ForeignKey("Usuario_autenticacion")]
+        public int? Id_usuario_autenticacion { get; set; }
+        public Usuario_autenticacion ?Usuario_autenticacion { get; set; }
     }
 }

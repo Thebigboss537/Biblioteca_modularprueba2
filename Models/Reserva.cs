@@ -8,9 +8,9 @@ namespace Biblioteca_modular.Models
         [Key]
         public int Id_reserva { get; set; }
 
-        [ForeignKey("Cliente")]
-        public int Id_cliente { get; set; }
-        public Usuario ?Cliente { get; set; }
+        [ForeignKey("Usuario")]
+        public int Id_usuario { get; set; }
+        public Usuario_autenticacion ?Usuario { get; set; }
 
         [ForeignKey("Material")]
         public int Id_material { get; set; }

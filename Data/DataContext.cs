@@ -33,9 +33,9 @@ namespace Biblioteca_modular.Data
 
         public DbSet<Tipo_material> Tipo_materiales { get; set; }
 
-        public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Usuario_autenticacion> Usuarios_autenticacion { get; set; }
 
-        public DbSet<Cliente> Clientes { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
     }
 }
 

@@ -4,6 +4,7 @@ using Biblioteca_modular.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Biblioteca_modular.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220911024812_5")]
+    partial class _5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,6 +58,53 @@ namespace Biblioteca_modular.Migrations
                     b.HasKey("Id_categoria");
 
                     b.ToTable("Categorias");
+                });
+
+            modelBuilder.Entity("Biblioteca_modular.Models.Cliente", b =>
+                {
+                    b.Property<int>("Id_cliente")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_cliente"), 1L, 1);
+
+                    b.Property<string>("Apellido")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<int>("Cedula")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Correo_electronico")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Id_programa_academico")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Id_usuario")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<int>("Semestre")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Telefono")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id_cliente");
+
+                    b.HasIndex("Id_programa_academico");
+
+                    b.HasIndex("Id_usuario");
+
+                    b.ToTable("Clientes");
                 });
 
             modelBuilder.Entity("Biblioteca_modular.Models.Devolucion", b =>
@@ -345,53 +394,6 @@ namespace Biblioteca_modular.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_usuario"), 1L, 1);
 
-                    b.Property<string>("Apellido")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.Property<int>("Cedula")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Correo_electronico")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Id_programa_academico")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Id_usuario_autenticacion")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.Property<int>("Semestre")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Telefono")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id_usuario");
-
-                    b.HasIndex("Id_programa_academico");
-
-                    b.HasIndex("Id_usuario_autenticacion");
-
-                    b.ToTable("Usuarios");
-                });
-
-            modelBuilder.Entity("Biblioteca_modular.Models.Usuario_autenticacion", b =>
-                {
-                    b.Property<int>("Id_usuario_autenticacion")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_usuario_autenticacion"), 1L, 1);
-
                     b.Property<int>("Id_rol")
                         .HasColumnType("int");
 
@@ -404,11 +406,28 @@ namespace Biblioteca_modular.Migrations
                     b.Property<int>("Username")
                         .HasColumnType("int");
 
-                    b.HasKey("Id_usuario_autenticacion");
+                    b.HasKey("Id_usuario");
 
                     b.HasIndex("Id_rol");
 
-                    b.ToTable("Usuarios_autenticacion");
+                    b.ToTable("Usuarios");
+                });
+
+            modelBuilder.Entity("Biblioteca_modular.Models.Cliente", b =>
+                {
+                    b.HasOne("Biblioteca_modular.Models.Programa_academico", "Programa_academico")
+                        .WithMany()
+                        .HasForeignKey("Id_programa_academico")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Biblioteca_modular.Models.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("Id_usuario");
+
+                    b.Navigation("Programa_academico");
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("Biblioteca_modular.Models.Devolucion", b =>
@@ -493,7 +512,7 @@ namespace Biblioteca_modular.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Biblioteca_modular.Models.Usuario_autenticacion", "Usuario")
+                    b.HasOne("Biblioteca_modular.Models.Usuario", "Usuario")
                         .WithMany()
                         .HasForeignKey("Id_usuario")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -512,7 +531,7 @@ namespace Biblioteca_modular.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Biblioteca_modular.Models.Usuario_autenticacion", "Usuario")
+                    b.HasOne("Biblioteca_modular.Models.Usuario", "Usuario")
                         .WithMany()
                         .HasForeignKey("Id_usuario")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -524,23 +543,6 @@ namespace Biblioteca_modular.Migrations
                 });
 
             modelBuilder.Entity("Biblioteca_modular.Models.Usuario", b =>
-                {
-                    b.HasOne("Biblioteca_modular.Models.Programa_academico", "Programa_academico")
-                        .WithMany()
-                        .HasForeignKey("Id_programa_academico")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Biblioteca_modular.Models.Usuario_autenticacion", "Usuario_autenticacion")
-                        .WithMany()
-                        .HasForeignKey("Id_usuario_autenticacion");
-
-                    b.Navigation("Programa_academico");
-
-                    b.Navigation("Usuario_autenticacion");
-                });
-
-            modelBuilder.Entity("Biblioteca_modular.Models.Usuario_autenticacion", b =>
                 {
                     b.HasOne("Biblioteca_modular.Models.Rol", "Rol")
                         .WithMany()
