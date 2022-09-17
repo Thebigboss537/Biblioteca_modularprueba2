@@ -39,7 +39,6 @@ builder.Services.AddScoped<ICategoriaRepositorio, CategoriaRepositorio>();
 builder.Services.AddScoped<IMaterialRepositorio, MaterialRepositorio>();
 builder.Services.AddScoped<IMaterial_autorRepositorio, Material_autorRepositorio>();
 builder.Services.AddScoped<IMaterial_categoriaRepositorio, Material_categoriaRepositorio>();
-builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
 
 
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();

@@ -31,9 +31,6 @@ namespace Biblioteca_modular
                 config.CreateMap<Tipo_materialDto, Tipo_material>();
                 config.CreateMap<Tipo_material, Tipo_materialDto>();
 
-                config.CreateMap<UsuarioDto, Usuario>();
-                config.CreateMap<Usuario, UsuarioDto>();
-
                 config.CreateMap<EditorialDto, Editorial>();
                 config.CreateMap<Editorial, EditorialDto>();
 

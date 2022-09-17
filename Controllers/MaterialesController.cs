@@ -141,17 +141,27 @@ namespace Biblioteca_modular.Controllers
                     MaterialDto.Ruta = filepath2;
                 }
 
+
                 Material_autorDto material_autorDto = new Material_autorDto();
                 Material_categoriaDto material_categoriaDto = new Material_categoriaDto();
 
 
+
                 MaterialDto model = await _MaterialRepositorio.CreateUpdate(MaterialDto);
 
-                material_autorDto.Id_autor = (int)MaterialDto.Id_autor;
-                material_autorDto.Id_material = model.Id_material;
+                foreach (var a in MaterialDto.Autores)
+                {
+                    material_autorDto.Id_autor = a.Id_autor;
+                    material_autorDto.Id_material = model.Id_material;
+                }
 
-                material_categoriaDto.Id_material = model.Id_material;
-                material_categoriaDto.Id_categoria = (int)MaterialDto.Id_categoria;
+                foreach (var b in MaterialDto.Categorias)
+                {
+                    material_categoriaDto.Id_categoria = b.Id_categoria;
+                    material_categoriaDto.Id_material = model.Id_material;
+                }
+
+                
 
                 material_autorDto = await _Material_autorRepositorio.CreateUpdate(material_autorDto);
                 material_categoriaDto = await _Material_categoriaRepositorio.CreateUpdate(material_categoriaDto);

@@ -41,8 +41,5 @@
 
         public List<Categoria> ?Categorias { get; set; }
 
-        public int ?Id_autor { get; set; }
-
-        public int ?Id_categoria { get; set; }
     }
 }
