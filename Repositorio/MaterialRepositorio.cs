@@ -21,6 +21,14 @@ namespace Biblioteca_modular.Repositorio
             _db = db;
             _mapper = mapper;
         }
+        public async Task<MaterialDto> AgregarArchivo(Material_archivoDto Material_ArchivoDto)
+        {
+            var a = await _db.Materiales.FindAsync(Material_ArchivoDto.Id_material);
+            a.Archivo = Material_ArchivoDto.Ruta;
+            _db.Materiales.Update(a);
+            await _db.SaveChangesAsync();
+            return _mapper.Map<Material, MaterialDto>(a);
+        }
 
         public async Task<MaterialDto> CreateUpdate(MaterialDto MaterialDto)
         {
@@ -31,10 +39,10 @@ namespace Biblioteca_modular.Repositorio
             }
             else
             {
-                if(MaterialDto.Ruta != null)
+                /*if(MaterialDto.Ruta != null)
                 {
                     Material.Archivo = MaterialDto.Ruta;
-                }
+                }*/
                 await _db.Materiales.AddAsync(Material);
             }
             await _db.SaveChangesAsync();
@@ -69,7 +77,7 @@ namespace Biblioteca_modular.Repositorio
 
             var a = _mapper.Map<MaterialDto>(Material);
 
-            a.Ruta = Material.Archivo;
+            //a.Ruta = Material.Archivo;
 
             return a;
         }
@@ -87,9 +95,9 @@ namespace Biblioteca_modular.Repositorio
 
             foreach (var a in materials)
             {
-                a.Autores = await _db.Material_Autores.Where(e => e.Id_material == a.Id_material).Select(e => e.Autor).ToListAsync();
+                a.Autores = _mapper.Map<List<Autor>, List<AutorDto>>(await _db.Material_Autores.Where(e => e.Id_material == a.Id_material).Select(e => e.Autor).ToListAsync()); 
 
-                a.Categorias = await _db.Material_Categorias.Where(e => e.Id_material == a.Id_material).Select(e => e.Categoria).ToListAsync();
+                a.Categorias = _mapper.Map<List<Categoria>, List<CategoriaDto>>(await _db.Material_Categorias.Where(e => e.Id_material == a.Id_material).Select(e => e.Categoria).ToListAsync());
 
                 foreach (var b in a.Autores)
                 {

@@ -90,7 +90,7 @@ namespace Biblioteca_modular.Controllers
             try
             {
 
-                if (MaterialDto.Archivo != null)
+                /*if (MaterialDto.Archivo != null)
                 {
 
                     var filePath = Path.Combine(_enviroment.ContentRootPath, "Archivos", MaterialDto.Archivo.FileName.Replace(MaterialDto.Archivo.FileName, MaterialDto.Titulo + ".pdf"));
@@ -103,7 +103,7 @@ namespace Biblioteca_modular.Controllers
                     }
 
                     MaterialDto.Ruta = filepath2;
-                }
+                }*/
 
                 MaterialDto model = await _MaterialRepositorio.CreateUpdate(MaterialDto);
                 _response.Result = model;
@@ -120,26 +120,63 @@ namespace Biblioteca_modular.Controllers
 
         // POST: api/Materiales
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost("crearmaterialarchivo")]
+        public async Task<ActionResult<Material>> PostAutorarchivo([FromForm]Material_archivoDto Material_ArchivoDto)
+        {
+            
+            try
+            {
+
+                /*if (Material_ArchivoDto.Archivo != null)
+                {*/
+
+                var filePath = Path.Combine(_enviroment.ContentRootPath, "Archivos", Material_ArchivoDto.Archivo.FileName.Replace(Material_ArchivoDto.Archivo.FileName, Material_ArchivoDto.Titulo + ".pdf"));
+
+                var filepath2 = Path.ChangeExtension(filePath, ".pdf");
+
+                using (var stream = System.IO.File.Create(filepath2))
+                {
+                    await Material_ArchivoDto.Archivo.CopyToAsync(stream);
+                }
+
+                Material_ArchivoDto.Ruta = filepath2;
+                MaterialDto model = await _MaterialRepositorio.AgregarArchivo(Material_ArchivoDto);
+                _response.Result = model;
+                /*}*/
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.DisplayMessage = "Error al crear el Material";
+                _response.ErrorMessages = new List<string> { ex.ToString() };
+                return BadRequest(_response);
+            }
+        }
+
+
+
+
         [HttpPost("crearmaterial")]
-        public async Task<ActionResult<Material>> PostAutor([FromForm]MaterialDto MaterialDto)
+        public async Task<ActionResult<Material>> PostAutor(MaterialDto MaterialDto)
         {
             try
             {
 
-                if (MaterialDto.Archivo != null)
+                /*if (archivo != null)
                 {
 
-                    var filePath = Path.Combine(_enviroment.ContentRootPath,"Archivos", MaterialDto.Archivo.FileName.Replace(MaterialDto.Archivo.FileName, MaterialDto.Titulo + ".pdf"));
+                    var filePath = Path.Combine(_enviroment.ContentRootPath,"Archivos", archivo.FileName.Replace(archivo.FileName, MaterialDto.Titulo + ".pdf"));
 
                     var filepath2 = Path.ChangeExtension(filePath, ".pdf");
 
                     using (var stream = System.IO.File.Create(filepath2))
                     {
-                        await MaterialDto.Archivo.CopyToAsync(stream);
+                        await archivo.CopyToAsync(stream);
                     }
 
                     MaterialDto.Ruta = filepath2;
-                }
+                }*/
 
 
                 Material_autorDto material_autorDto = new Material_autorDto();
@@ -149,22 +186,20 @@ namespace Biblioteca_modular.Controllers
 
                 MaterialDto model = await _MaterialRepositorio.CreateUpdate(MaterialDto);
 
+                material_autorDto.Id_material = model.Id_material;
+                material_categoriaDto.Id_material = model.Id_material;
+
                 foreach (var a in MaterialDto.Autores)
                 {
                     material_autorDto.Id_autor = a.Id_autor;
-                    material_autorDto.Id_material = model.Id_material;
+                    await _Material_autorRepositorio.CreateUpdate(material_autorDto);
                 }
 
                 foreach (var b in MaterialDto.Categorias)
                 {
                     material_categoriaDto.Id_categoria = b.Id_categoria;
-                    material_categoriaDto.Id_material = model.Id_material;
+                    await _Material_categoriaRepositorio.CreateUpdate(material_categoriaDto);
                 }
-
-                
-
-                material_autorDto = await _Material_autorRepositorio.CreateUpdate(material_autorDto);
-                material_categoriaDto = await _Material_categoriaRepositorio.CreateUpdate(material_categoriaDto);
 
                 _response.Result = model;
                 return CreatedAtAction("GetMaterial", new { id = model.Id_material }, _response);
