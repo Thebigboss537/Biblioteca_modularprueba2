@@ -1,4 +1,6 @@
-﻿namespace Biblioteca_modular.Models.Dto
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Biblioteca_modular.Models.Dto
 {
     public class PrestamoDto
     {
@@ -6,8 +8,8 @@
 
         public int ?Cedula { get; set; }
 
-        public int ?Id_ususario { get; set; }
-        public Usuario_autenticacionDto ?UsuarioDto { get; set; }
+        public int ?Id_usuario { get; set; }
+        public Usuario? Usuario { get; set; }
 
         public int Id_material { get; set; }
         public MaterialDto ?MaterialDto { get; set; }

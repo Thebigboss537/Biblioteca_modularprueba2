@@ -92,7 +92,7 @@ namespace Biblioteca_modular.Controllers
             try
             {
                 var usuarioid = User.Claims.Where(e => e.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier");
-                reservaDto.Id_ususario = Convert.ToInt32(usuarioid.FirstOrDefault().Value);
+                reservaDto.Id_usuario = Convert.ToInt32(usuarioid.FirstOrDefault().Value);
                 ReservaDto model = await _reservaRepositorio.CreateUpdate(reservaDto);
                 _response.Result = model;
                 return CreatedAtAction("GetReserva", new { id = model.Id_reserva }, _response);

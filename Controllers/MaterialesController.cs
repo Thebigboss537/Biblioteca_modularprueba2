@@ -121,7 +121,7 @@ namespace Biblioteca_modular.Controllers
         // POST: api/Materiales
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("crearmaterialarchivo")]
-        public async Task<ActionResult<Material>> PostAutorarchivo([FromForm]Material_archivoDto Material_ArchivoDto)
+        public async Task<ActionResult<Material>> PostMaterialArchivo([FromForm]Material_archivoDto Material_ArchivoDto)
         {
             
             try
@@ -158,7 +158,7 @@ namespace Biblioteca_modular.Controllers
 
 
         [HttpPost("crearmaterial")]
-        public async Task<ActionResult<Material>> PostAutor(MaterialDto MaterialDto)
+        public async Task<ActionResult<Material>> PostMaterial(MaterialDto MaterialDto)
         {
             try
             {

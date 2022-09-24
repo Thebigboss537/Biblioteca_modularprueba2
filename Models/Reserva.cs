@@ -10,7 +10,7 @@ namespace Biblioteca_modular.Models
 
         [ForeignKey("Usuario")]
         public int Id_usuario { get; set; }
-        public Usuario_autenticacion ?Usuario { get; set; }
+        public Usuario? Usuario { get; set; }
 
         [ForeignKey("Material")]
         public int Id_material { get; set; }

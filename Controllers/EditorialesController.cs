@@ -28,7 +28,7 @@ namespace Biblioteca_modular.Controllers
 
         // GET: api/Editoriales
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Editorial>>> GetEditorial()
+        public async Task<ActionResult<IEnumerable<Editorial>>> GetEditoriales()
         {
             try
             {
@@ -47,7 +47,7 @@ namespace Biblioteca_modular.Controllers
 
         // GET: api/Editoriales/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Editorial>> Editorial(int id)
+        public async Task<ActionResult<Editorial>> GetEditorial(int id)
         {
             var Editorial = await _EditorialRepositorio.GetEditorialById(id);
             if (Editorial == null)

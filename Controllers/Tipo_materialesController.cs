@@ -28,7 +28,7 @@ namespace Biblioteca_modular.Controllers
 
         // GET: api/Tipo_materiales
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Tipo_material>>> GetTipo_material()
+        public async Task<ActionResult<IEnumerable<Tipo_material>>> GetTipos_materiales()
         {
             try
             {

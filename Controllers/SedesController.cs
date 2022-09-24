@@ -30,7 +30,7 @@ namespace Biblioteca_modular.Controllers
 
         // GET: api/Sedes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Sede>>> GetSede()
+        public async Task<ActionResult<IEnumerable<Sede>>> GetSedes()
         {
             try
             {
@@ -49,7 +49,7 @@ namespace Biblioteca_modular.Controllers
 
         // GET: api/Sede/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Sede>> Sede(int id)
+        public async Task<ActionResult<Sede>> GetSede(int id)
         {
             var Sede = await _SedeRepositorio.GetSedeById(id);
             if (Sede == null)

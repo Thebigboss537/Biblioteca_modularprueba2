@@ -27,7 +27,7 @@ namespace Biblioteca_modular.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Programa_academico>>> GetPrograma_academicos()
+        public async Task<ActionResult<IEnumerable<Programa_academico>>> GetProgramas_academicos()
         {
             try
             {
