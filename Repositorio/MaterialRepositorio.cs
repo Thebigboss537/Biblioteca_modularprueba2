@@ -71,15 +71,27 @@ namespace Biblioteca_modular.Repositorio
 
         public async Task<MaterialDto> GetMaterialById(int id)
         {
-            Material Material = await _db.Materiales.Include(e => e.Editorial).Include(e => e.Sede).Include(e => e.Tipo_material).Where(x => x.Id_material == id).FirstOrDefaultAsync();
+            MaterialDto Material = _mapper.Map<MaterialDto>(await _db.Materiales.Include(e => e.Editorial).Include(e => e.Sede).Include(e => e.Tipo_material).Where(x => x.Id_material == id).FirstOrDefaultAsync());
 
-            
 
-            var a = _mapper.Map<MaterialDto>(Material);
+            Material.Autores = _mapper.Map<List<Autor>, List<AutorDto>>(await _db.Material_Autores.Where(e => e.Id_material == Material.Id_material).Select(e => e.Autor).ToListAsync());
+
+            Material.Categorias = _mapper.Map<List<Categoria>, List<CategoriaDto>>(await _db.Material_Categorias.Where(e => e.Id_material == Material.Id_material).Select(e => e.Categoria).ToListAsync());
+
+            foreach (var b in Material.Autores)
+            {
+                Material.nombresdeautores = b.Nombre.ToString() + " " + Material.nombresdeautores;
+            }
+
+            foreach (var c in Material.Categorias)
+            {
+                Material.nombresdecategorias = c.Nombre.ToString() + " " + Material.nombresdecategorias;
+            }
+
 
             //a.Ruta = Material.Archivo;
 
-            return a;
+            return Material;
         }
 
         public async Task<List<MaterialDto>> GetMateriales()
