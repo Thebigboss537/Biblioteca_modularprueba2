@@ -110,11 +110,7 @@ namespace Biblioteca_modular.Repositorio
         public async Task<List<MaterialDto>> GetDisponibles()
         {
 
-            /*List<Material_autor> material = await _db.Materiales.Join(_db.Material_Autores, x => x.Id_material, y => y.Id_material, (x, y) => new { Materiales = x, Material_Autores = y }).Select(e => e.Material_Autores).Include(e => e.Material).Include(e => e.Autor).Include(e => e.Material.Editorial).Include(e => e.Material.Sede).Include(e => e.Material.Tipo_material).ToListAsync();*/
-
-            /*var a = await _db.Material_Autores.Include(e => e.Material).Include(e => e.Autor).Join(_db.Material_Categorias, x => x.Id_material, y => y.Id_material, (x, y) => new { Material_Autores = x, Material_Categorias = y }).ToListAsync();*/
-
-            List<MaterialDto> materials = _mapper.Map<List<MaterialDto>>(await _db.Materiales.Include(e => e.Editorial).Include(e => e.Sede).Include(e => e.Tipo_material).Where(x => !_db.Reservas.Select(x => x.Id_material).Contains(x.Id_material)).ToListAsync());   /* AddRange(_db.Material_Autores.Where(e => e.Id_material == 1).Select(e => e.Autor).;*/
+            List<MaterialDto> materials = _mapper.Map<List<MaterialDto>>(await _db.Materiales.Include(e => e.Editorial).Include(e => e.Sede).Include(e => e.Tipo_material).Where(x => !_db.Reservas.Select(x => x.Id_material).Contains(x.Id_material)).ToListAsync());   
 
 
 
@@ -133,16 +129,9 @@ namespace Biblioteca_modular.Repositorio
                 {
                     a.nombresdecategorias = c.Nombre.ToString() + " " + a.nombresdecategorias;
                 }
-                /*a.Autores = await _db.Material_Autores.Where(e => e.Id_material == a.Id_material).Select(e => e.Autor).ToListAsync();*/
+                
 
             }
-
-
-            /*var a = await _db.Autores.Join(_db.Material_Autores, x => x.Id_autor, y => y.Id_autor, (x, y) => new { Autores = x, Material_Autores = y }).Join(_db.Materiales, x => x.Material_Autores.Id_material, y => y.Id_material, (x, y) => new { Material_Autores = x, Materiales = y }).ToListAsync(); /*.Join(_db.Material_Categorias, x => x.Id_material, y => y.Id_material, (x, y) => new { Materiales = x, Material_Categorias = y }).Join(_db.Categorias, x => x.Material_Categorias.Id_categoria, y => y.Id_categoria, (x, y) => new { Material_Categorias = x, Categorias = y }).ToListAsync();*/
-
-            /*var d = await _db.Materiales.Join(_db.Material_Autores, x => x.Id_material, y => y.Id_material, (x, y) => new { Materiales = x, Material_Autores = y }).Select(e => e.Material_Autores).Include(e => e.Autor).Include(e => e.Material).Include(e => e.Material.Editorial).Include(e => e.Material.Sede).Include(e => e.Material.Tipo_material).ToListAsync();   /*.Join(_db.Material_Categorias, x => x.Materiales.Id_material, y => y.Id_material, (x, y) => new { Materiales = x, Material_Categorias = y }).ToListAsync();*/
-
-            /*.Select(e => e.Materiales).Include(e => e.Material_Autores).Include(e => e.Materiales.Editorial).Include(e => e.Materiales.Sede).ToListAsync();*/
 
             return materials;
         }

@@ -13,7 +13,7 @@ using Biblioteca_modular.Models.Dto;
 
 namespace Biblioteca_modular.Controllers
 {
-    [Route("api/")]
+    [Route("api/prestamos/")]
     [ApiController]
     public class PrestamosController : ControllerBase
     {
@@ -27,7 +27,7 @@ namespace Biblioteca_modular.Controllers
         }
 
         // GET: api/Prestamoes
-        [HttpGet("prestamo")]
+        [HttpGet("prestados")]
         public async Task<ActionResult<IEnumerable<Prestamo>>> GetPrestamos()
         {
             try
@@ -45,6 +45,25 @@ namespace Biblioteca_modular.Controllers
             return Ok(_response);
         }
 
+        [HttpGet("prestadosid")]
+        public async Task<ActionResult<IEnumerable<Prestamo>>> GetPrestamosid()
+        {
+            var id = User.Claims.Where(e => e.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier");
+            try
+            {
+                var lista = await _prestamoRepositorio.GetPrestadosid(Convert.ToInt32(id.FirstOrDefault().Value));
+                _response.Result = lista;
+                _response.DisplayMessage = "Lista de prestamos";
+            }
+            catch (Exception ex)
+            {
+
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string> { ex.ToString() };
+            }
+            return Ok(_response);
+        }
+        
         // GET: api/Prestamoes/5
         [HttpGet("prestamo/{id}")]
         public async Task<ActionResult<Prestamo>> GetPrestamo(int id)
@@ -58,6 +77,24 @@ namespace Biblioteca_modular.Controllers
             }
             _response.Result = prestamo;
             _response.DisplayMessage = "Informacion del prestamo";
+            return Ok(_response);
+        }
+
+        [HttpGet("disponibles")]
+        public async Task<ActionResult<IEnumerable<Material>>> Getdisponibles()
+        {
+            try
+            {
+                var lista = await _prestamoRepositorio.GetDisponibles();
+                _response.Result = lista;
+                _response.DisplayMessage = "Lista de Materiales disponibles para reservar";
+            }
+            catch (Exception ex)
+            {
+
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string> { ex.ToString() };
+            }
             return Ok(_response);
         }
 
