@@ -15,7 +15,7 @@ using System.Security.Claims;
 
 namespace Biblioteca_modular.Controllers
 {
-    [Route("api/")]
+    [Route("api/reservas/")]
     [ApiController]
     [Authorize]
     public class ReservasController : ControllerBase
@@ -30,12 +30,31 @@ namespace Biblioteca_modular.Controllers
         }
 
         // GET: api/Reservaes
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Reserva>>> GetReservas()
+        [HttpGet("reservados")]
+        public async Task<ActionResult<IEnumerable<Reserva>>> GetReservados()
         {
             try
             {
                 var lista = await _reservaRepositorio.GetReservas();
+                _response.Result = lista;
+                _response.DisplayMessage = "Lista de reservas";
+            }
+            catch (Exception ex)
+            {
+
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string> { ex.ToString() };
+            }
+            return Ok(_response);
+        }
+
+        [HttpGet("reservadosid")]
+        public async Task<ActionResult<IEnumerable<Reserva>>> GetReservadosid()
+        {
+            var id = User.Claims.Where(e => e.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier");
+            try
+            {
+                var lista = await _reservaRepositorio.GetReservadosid(Convert.ToInt32(id.FirstOrDefault().Value));
                 _response.Result = lista;
                 _response.DisplayMessage = "Lista de reservas";
             }
@@ -63,6 +82,26 @@ namespace Biblioteca_modular.Controllers
             _response.DisplayMessage = "Informacion del reserva";
             return Ok(_response);
         }
+
+        [HttpGet("disponibles")]
+        public async Task<ActionResult<IEnumerable<Material>>> Getdisponibles()
+        {
+            try
+            {
+                var lista = await _reservaRepositorio.GetDisponibles();
+                _response.Result = lista;
+                _response.DisplayMessage = "Lista de Materiales disponibles para reservar";
+            }
+            catch (Exception ex)
+            {
+
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string> { ex.ToString() };
+            }
+            return Ok(_response);
+        }
+
+        
 
         // PUT: api/Reservaes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

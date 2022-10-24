@@ -71,7 +71,7 @@ namespace Biblioteca_modular.Repositorio
 
         public async Task<MaterialDto> GetMaterialById(int id)
         {
-            Material Material = await _db.Materiales.FindAsync(id);
+            Material Material = await _db.Materiales.Include(e => e.Editorial).Include(e => e.Sede).Include(e => e.Tipo_material).Where(x => x.Id_material == id).FirstOrDefaultAsync();
 
             
 

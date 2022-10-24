@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Biblioteca_modular.Models.Dto;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Biblioteca_modular.Models
@@ -14,7 +15,7 @@ namespace Biblioteca_modular.Models
 
         [ForeignKey("Material")]
         public int Id_material { get; set; }
-        public Material ?Material { get; set; }
+        public Material? Material { get; set; }
 
         [Required]
         public DateTime Fecha_reserva { get; set; }
