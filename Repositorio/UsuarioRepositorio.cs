@@ -30,7 +30,14 @@ namespace Biblioteca_modular.Repositorio
             else
             {
                 Usuario_autenticacion usuario_autenticacion = new Usuario_autenticacion { Username = usuarioDto.Cedula };
-                usuario_autenticacion.Id_rol = 3;
+                if (usuarioDto.Id_programa_academico == null)
+                {
+                    usuario_autenticacion.Id_rol = 4;
+                }
+                else
+                {
+                    usuario_autenticacion.Id_rol = 3;
+                }
                 await _db.Usuarios_autenticacion.AddAsync(usuario_autenticacion);
                 await _db.SaveChangesAsync();
                 usuario.Id_usuario_autenticacion = usuario_autenticacion.Id_usuario_autenticacion;
