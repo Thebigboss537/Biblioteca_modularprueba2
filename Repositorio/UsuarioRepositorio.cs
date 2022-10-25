@@ -30,8 +30,10 @@ namespace Biblioteca_modular.Repositorio
             else
             {
                 Usuario_autenticacion usuario_autenticacion = new Usuario_autenticacion { Username = usuarioDto.Cedula };
-                if (usuarioDto.Id_programa_academico == null)
+                if (usuario.Id_programa_academico == null)
                 {
+                    usuario.Id_programa_academico = 1;
+                    usuario.Semestre = 0;
                     usuario_autenticacion.Id_rol = 4;
                 }
                 else
@@ -83,7 +85,7 @@ namespace Biblioteca_modular.Repositorio
 
         public async Task<List<Programa_academicoDto>> GetProgramas_academicos()
         {
-            List<Programa_academico> lista = await _db.Programas_academicos.ToListAsync();
+            List<Programa_academico> lista = await _db.Programas_academicos.Where(x => x.Id_programa_academico != 1).ToListAsync();
 
             return _mapper.Map<List<Programa_academicoDto>>(lista);
         }
