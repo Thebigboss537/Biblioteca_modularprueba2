@@ -61,7 +61,7 @@ namespace Biblioteca_modular.Repositorio
 
         public async Task<List<ReservaDto>> GetReservas()
         {
-            List<ReservaDto> lista = _mapper.Map<List<ReservaDto>>(await _db.Reservas.Join(_db.Materiales, x => x.Id_material, y => y.Id_material, (x, y) => new { Reserva = x, Material = y }).Select(x => x.Reserva).Join(_db.Usuarios, x => x.Id_usuario, y => y.Id_usuario, (x, y) => new { Reserva = x, Usuario = y }).Select(x => x.Reserva).Include(x => x.Material).Include(x => x.Usuario).ToListAsync());
+            List<ReservaDto> lista = _mapper.Map<List<ReservaDto>>(await _db.Reservas/*.Join(_db.Materiales, x => x.Id_material, y => y.Id_material, (x, y) => new { Reserva = x, Material = y }).Select(x => x.Reserva).Join(_db.Usuarios, x => x.Id_usuario, y => y.Id_usuario, (x, y) => new { Reserva = x, Usuario = y }).Select(x => x.Reserva)*/.Include(x => x.Material).Include(x => x.Usuario).Where(x => x.Esta_reservado == true).ToListAsync());
 
             foreach (var a in lista)
             {
@@ -85,7 +85,7 @@ namespace Biblioteca_modular.Repositorio
 
         public async Task<List<ReservaDto>> GetReservadosid(int id)
         {
-            List<ReservaDto> lista = _mapper.Map<List<ReservaDto>>(await _db.Reservas.Join(_db.Materiales, x => x.Id_material, y => y.Id_material, (x, y) => new { Reserva = x, Material = y }).Select(x => x.Reserva).Join(_db.Usuarios, x => x.Id_usuario, y => y.Id_usuario, (x, y) => new { Reserva = x, Usuario = y }).Select(x => x.Reserva).Include(x => x.Material).Include(x => x.Usuario).Where(x => x.Id_usuario == id).ToListAsync());
+            List<ReservaDto> lista = _mapper.Map<List<ReservaDto>>(await _db.Reservas/*.Join(_db.Materiales, x => x.Id_material, y => y.Id_material, (x, y) => new { Reserva = x, Material = y }).Select(x => x.Reserva).Join(_db.Usuarios, x => x.Id_usuario, y => y.Id_usuario, (x, y) => new { Reserva = x, Usuario = y }).Select(x => x.Reserva)*/.Include(x => x.Material).Include(x => x.Usuario).Where(x => x.Esta_reservado == true).Where(x => x.Id_usuario == id).ToListAsync());
 
             foreach (var a in lista)
             {

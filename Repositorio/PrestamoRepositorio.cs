@@ -65,7 +65,7 @@ namespace Biblioteca_modular.Repositorio
 
         public async Task<List<PrestamoDto>> GetPrestamos()
         {
-            List<PrestamoDto> lista = _mapper.Map<List<PrestamoDto>>(await _db.Prestamos.Join(_db.Materiales, x => x.Id_material, y => y.Id_material, (x, y) => new { Prestamo = x, Material = y }).Select(x => x.Prestamo).Join(_db.Usuarios, x => x.Id_usuario, y => y.Id_usuario, (x, y) => new { Prestamo = x, Usuario = y }).Select(x => x.Prestamo).Include(x => x.Material).Include(x => x.Usuario).ToListAsync());
+            List<PrestamoDto> lista = _mapper.Map<List<PrestamoDto>>(await _db.Prestamos.Join(_db.Devoluciones, x => x.Id_prestamo, y => y.Id_prestamo, (x, y) => new { Prestamo = x, Devolucion = y }).Include(x => x.Devolucion)/*.Join(_db.Materiales, x => x.Id_material, y => y.Id_material, (x, y) => new { Prestamo = x, Material = y }).Select(x => x.Prestamo).Join(_db.Usuarios, x => x.Id_usuario, y => y.Id_usuario, (x, y) => new { Prestamo = x, Usuario = y }).Select(x => x.Prestamo)*/.Include(x => x.Prestamo.Material).Include(x => x.Prestamo.Usuario).Where(x => x.Devolucion.Fecha_devolucion != null).ToListAsync());
 
             foreach (var a in lista)
             {
@@ -89,7 +89,7 @@ namespace Biblioteca_modular.Repositorio
 
         public async Task<List<PrestamoDto>> GetPrestadosid(int id)
         {
-            List<PrestamoDto> lista = _mapper.Map<List<PrestamoDto>>(await _db.Reservas.Join(_db.Materiales, x => x.Id_material, y => y.Id_material, (x, y) => new { Prestamo = x, Material = y }).Select(x => x.Prestamo).Join(_db.Usuarios, x => x.Id_usuario, y => y.Id_usuario, (x, y) => new { Prestamo = x, Usuario = y }).Select(x => x.Prestamo).Include(x => x.Material).Include(x => x.Usuario).Where(x => x.Id_usuario == id).ToListAsync());
+            List<PrestamoDto> lista = _mapper.Map<List<PrestamoDto>>(await _db.Prestamos.Join(_db.Devoluciones, x => x.Id_prestamo, y => y.Id_prestamo, (x, y) => new { Prestamo = x, Devolucion = y }).Include(x => x.Devolucion)/*.Join(_db.Materiales, x => x.Id_material, y => y.Id_material, (x, y) => new { Prestamo = x, Material = y }).Select(x => x.Prestamo).Join(_db.Usuarios, x => x.Id_usuario, y => y.Id_usuario, (x, y) => new { Prestamo = x, Usuario = y }).Select(x => x.Prestamo)*/.Include(x => x.Prestamo.Material).Include(x => x.Prestamo.Usuario).Where(x => x.Devolucion.Fecha_devolucion != null).Where(x => x.Prestamo.Id_usuario == id).ToListAsync());
 
             foreach (var a in lista)
             {
