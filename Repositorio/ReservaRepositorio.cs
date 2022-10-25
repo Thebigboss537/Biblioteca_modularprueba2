@@ -110,7 +110,7 @@ namespace Biblioteca_modular.Repositorio
         public async Task<List<MaterialDto>> GetDisponibles()
         {
 
-            List<MaterialDto> materials = _mapper.Map<List<MaterialDto>>(await _db.Materiales.Include(e => e.Editorial).Include(e => e.Sede).Include(e => e.Tipo_material).Where(x => !_db.Reservas.Select(x => x.Id_material).Contains(x.Id_material)).ToListAsync());   
+            List<MaterialDto> materials = _mapper.Map<List<MaterialDto>>(await _db.Materiales.Include(e => e.Editorial).Include(e => e.Sede).Include(e => e.Tipo_material).Where(x => !_db.Reservas.Where(x => x.Esta_reservado == true).Select(x => x.Id_material).Contains(x.Id_material)).ToListAsync());   
 
 
 

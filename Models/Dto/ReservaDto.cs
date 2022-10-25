@@ -12,5 +12,7 @@
         public MaterialDto ?Material { get; set; }
 
         public DateTime ?Fecha_reserva { get; set; }
+
+        public bool ?Esta_reservado { get; set; }
     }
 }

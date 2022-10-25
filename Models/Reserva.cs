@@ -19,5 +19,8 @@ namespace Biblioteca_modular.Models
 
         [Required]
         public DateTime Fecha_reserva { get; set; }
+
+        [Required]
+        public bool ?Esta_reservado { get; set; }
     }
 }
