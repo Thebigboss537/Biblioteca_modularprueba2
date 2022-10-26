@@ -109,13 +109,28 @@ namespace Biblioteca_modular.Repositorio
 
         public async Task<List<MaterialDto>> GetDisponibles()
         {
+            List<ReservaDto> reservas = _mapper.Map<List<ReservaDto>>(await _db.Reservas.ToListAsync());
 
-            List<MaterialDto> materials = _mapper.Map<List<MaterialDto>>(await _db.Materiales.Include(e => e.Editorial).Include(e => e.Sede).Include(e => e.Tipo_material).Where(x => !_db.Reservas.Where(x => x.Esta_reservado == true).Select(x => x.Id_material).Contains(x.Id_material)).ToListAsync());   
+            if (reservas != null)
+            {
+                foreach (var a in reservas)
+                {
+                    if (a.Esta_reservado == true)
+                    {
+                        if (a.Fecha_reserva.Value.AddDays(5) == DateTime.Now)
+                        {
+                            a.Esta_reservado = false;
+                        }
+                    }
+                }
+            }
 
+            List<MaterialDto> materials = _mapper.Map<List<MaterialDto>>(await _db.Materiales.Include(e => e.Editorial).Include(e => e.Sede).Include(e => e.Tipo_material).Where(x => !_db.Reservas.Where(x => x.Esta_reservado == true).Select(x => x.Id_material).Contains(x.Id_material)).ToListAsync());
 
-
+            
             foreach (var a in materials)
             {
+                
                 a.Autores = _mapper.Map<List<Autor>, List<AutorDto>>(await _db.Material_Autores.Where(e => e.Id_material == a.Id_material).Select(e => e.Autor).ToListAsync());
 
                 a.Categorias = _mapper.Map<List<Categoria>, List<CategoriaDto>>(await _db.Material_Categorias.Where(e => e.Id_material == a.Id_material).Select(e => e.Categoria).ToListAsync());
@@ -134,6 +149,15 @@ namespace Biblioteca_modular.Repositorio
             }
 
             return materials;
+        }
+
+        public async Task<ReservaDto> Cancelarreserva(int id)
+        {
+            Reserva reserva = await _db.Reservas.FindAsync(id);
+
+            reserva.Esta_reservado = false;
+
+            return _mapper.Map<ReservaDto>(reserva);
         }
     }
 }

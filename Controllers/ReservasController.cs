@@ -60,7 +60,6 @@ namespace Biblioteca_modular.Controllers
             }
             catch (Exception ex)
             {
-
                 _response.IsSuccess = false;
                 _response.ErrorMessages = new List<string> { ex.ToString() };
             }
@@ -72,6 +71,21 @@ namespace Biblioteca_modular.Controllers
         public async Task<ActionResult<Reserva>> GetReserva(int id)
         {
             var reserva = await _reservaRepositorio.GetReservaById(id);
+            if (reserva == null)
+            {
+                _response.IsSuccess = false;
+                _response.DisplayMessage = "Reserva no existe";
+                return NotFound(_response);
+            }
+            _response.Result = reserva;
+            _response.DisplayMessage = "Informacion del reserva";
+            return Ok(_response);
+        }
+
+        [HttpGet("cancelar/{id}")]
+        public async Task<ActionResult<Reserva>> GetCancelar(int id)
+        {
+            var reserva = await _reservaRepositorio.Cancelarreserva(id);
             if (reserva == null)
             {
                 _response.IsSuccess = false;
