@@ -26,6 +26,7 @@ namespace Biblioteca_modular.Repositorio
             else
             {
                 reserva.Fecha_reserva = DateTime.Now;
+                reserva.Esta_reservado = true;
                 await _db.Reservas.AddAsync(reserva);
             }
             await _db.SaveChangesAsync();
