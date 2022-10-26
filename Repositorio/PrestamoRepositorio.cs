@@ -65,7 +65,7 @@ namespace Biblioteca_modular.Repositorio
 
         public async Task<List<PrestamoDto>> GetPrestamos()
         {
-            List<PrestamoDto> lista = _mapper.Map<List<PrestamoDto>>(await _db.Prestamos.Join(_db.Devoluciones, x => x.Id_prestamo, y => y.Id_prestamo, (x, y) => new { Prestamo = x, Devolucion = y }).Include(x => x.Devolucion)/*.Join(_db.Materiales, x => x.Id_material, y => y.Id_material, (x, y) => new { Prestamo = x, Material = y }).Select(x => x.Prestamo).Join(_db.Usuarios, x => x.Id_usuario, y => y.Id_usuario, (x, y) => new { Prestamo = x, Usuario = y }).Select(x => x.Prestamo)*/.Include(x => x.Prestamo.Material).Include(x => x.Prestamo.Usuario).Where(x => x.Devolucion.Fecha_devolucion != null).ToListAsync());
+            List<PrestamoDto> lista = _mapper.Map<List<PrestamoDto>>(await _db.Prestamos.Join(_db.Devoluciones, x => x.Id_prestamo, y => y.Id_prestamo, (x, y) => new { Prestamo = x, Devolucion = y }).Select(x => x.Devolucion)/*.Join(_db.Materiales, x => x.Id_material, y => y.Id_material, (x, y) => new { Prestamo = x, Material = y }).Select(x => x.Prestamo).Join(_db.Usuarios, x => x.Id_usuario, y => y.Id_usuario, (x, y) => new { Prestamo = x, Usuario = y }).Select(x => x.Prestamo)*/.Include(x => x.Prestamo.Material).Include(x => x.Prestamo.Usuario).Where(x => x.Fecha_devolucion != null).ToListAsync());
 
             foreach (var a in lista)
             {
@@ -89,7 +89,7 @@ namespace Biblioteca_modular.Repositorio
 
         public async Task<List<PrestamoDto>> GetPrestadosid(int id)
         {
-            List<PrestamoDto> lista = _mapper.Map<List<PrestamoDto>>(await _db.Prestamos.Join(_db.Devoluciones, x => x.Id_prestamo, y => y.Id_prestamo, (x, y) => new { Prestamo = x, Devolucion = y }).Include(x => x.Devolucion)/*.Join(_db.Materiales, x => x.Id_material, y => y.Id_material, (x, y) => new { Prestamo = x, Material = y }).Select(x => x.Prestamo).Join(_db.Usuarios, x => x.Id_usuario, y => y.Id_usuario, (x, y) => new { Prestamo = x, Usuario = y }).Select(x => x.Prestamo)*/.Include(x => x.Prestamo.Material).Include(x => x.Prestamo.Usuario).Where(x => x.Devolucion.Fecha_devolucion != null).Where(x => x.Prestamo.Id_usuario == id).ToListAsync());
+            List<PrestamoDto> lista = _mapper.Map<List<PrestamoDto>>(await _db.Prestamos.Join(_db.Devoluciones, x => x.Id_prestamo, y => y.Id_prestamo, (x, y) => new { Prestamo = x, Devolucion = y }).Select(x => x.Devolucion).Include(x => x.Prestamo.Material).Include(x => x.Prestamo.Usuario).Where(x => x.Fecha_devolucion != null).Where(x => x.Prestamo.Id_usuario == id).ToListAsync());
 
             foreach (var a in lista)
             {
@@ -114,9 +114,7 @@ namespace Biblioteca_modular.Repositorio
         public async Task<List<MaterialDto>> GetDisponibles()
         {
 
-            List<MaterialDto> materials = _mapper.Map<List<MaterialDto>>(await _db.Materiales.Include(e => e.Editorial).Include(e => e.Sede).Include(e => e.Tipo_material).Where(x => !_db.Prestamos.Join(_db.Devoluciones, x => x.Id_prestamo, y => y.Id_prestamo, (x, y) => new { Prestamo = x, Devolucion = y }).Include(x => x.Devolucion).Where(x => x.Devolucion.Fecha_devolucion == null).Select(x => x.Prestamo).Select(x => x.Id_material).Contains(x.Id_material)).ToListAsync());
-
-
+            List<MaterialDto> materials = _mapper.Map<List<MaterialDto>>(await _db.Materiales.Include(e => e.Editorial).Include(e => e.Sede).Include(e => e.Tipo_material).Where(x => !_db.Prestamos.Where(y => _db.Devoluciones.Where(x => x.Id_prestamo == y.Id_prestamo && x.Fecha_devolucion != null).Count() <= 0 ).Select(x => x.Id_material).Contains(x.Id_material)).ToListAsync());
 
             foreach (var a in materials)
             {
