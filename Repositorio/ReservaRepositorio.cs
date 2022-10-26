@@ -157,6 +157,9 @@ namespace Biblioteca_modular.Repositorio
 
             reserva.Esta_reservado = false;
 
+            _db.Reservas.Update(reserva);
+            await _db.SaveChangesAsync();
+
             return _mapper.Map<ReservaDto>(reserva);
         }
     }
