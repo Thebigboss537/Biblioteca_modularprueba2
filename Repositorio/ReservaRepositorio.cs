@@ -54,7 +54,7 @@ namespace Biblioteca_modular.Repositorio
 
         public async Task<ReservaDto> GetReservaById(int id)
         {
-            Reserva reserva = await _db.Reservas.FindAsync(id);
+            Reserva reserva = await _db.Reservas.Include(x => x.Material).Include(x => x.Usuario).Where(x => x.Id_usuario == id).FirstOrDefaultAsync();
 
             return _mapper.Map<ReservaDto>(reserva);
         }
