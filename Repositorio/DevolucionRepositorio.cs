@@ -18,6 +18,7 @@ namespace Biblioteca_modular.Repositorio
 
         public async Task<DevolucionDto> CreateUpdate(DevolucionDto devolucionDto)
         {
+            
             Devolucion devolucion = _mapper.Map<DevolucionDto, Devolucion>(devolucionDto);
             if (devolucion.Id_devolucion > 0)
             {
@@ -25,6 +26,8 @@ namespace Biblioteca_modular.Repositorio
             }
             else
             {
+                devolucion.Fecha_devolucion = DateTime.Now;
+
                 await _db.Devoluciones.AddAsync(devolucion);
             }
             await _db.SaveChangesAsync();
