@@ -112,7 +112,7 @@ namespace Biblioteca_modular.Controllers
                 if (estaeliminado)
                 {
                     _response.Result = estaeliminado;
-                    _response.DisplayMessage = "Cliente eliminado con exito";
+                    _response.DisplayMessage = "Autor eliminado con exito";
                     return Ok(_response);
                 }
                 else

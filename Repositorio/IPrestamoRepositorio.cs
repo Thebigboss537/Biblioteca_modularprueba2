@@ -10,5 +10,6 @@ namespace Biblioteca_modular.Repositorio
         Task<PrestamoDto> GetPrestamoById(int id);
         Task<PrestamoDto> CreateUpdate(PrestamoDto prestamoDto);
         Task<bool> DeletePrestamo(int id);
+        Task<UsuarioDto> ExistUsuario(PrestamoDto prestamoDto);
     }
 }

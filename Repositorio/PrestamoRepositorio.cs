@@ -26,7 +26,10 @@ namespace Biblioteca_modular.Repositorio
             else
             {
                 var a = _db.Usuarios.Where(e => e.Cedula == prestamoDto.Cedula).FirstOrDefault();
+                if (a == null)
+                {
 
+                }
                 prestamo.Id_usuario = a.Id_usuario;
                 prestamo.Fecha_prestamo = DateTime.Now;
                 prestamo.Fecha_limite = DateTime.Now.AddDays(10);
@@ -34,6 +37,19 @@ namespace Biblioteca_modular.Repositorio
             }
             await _db.SaveChangesAsync();
             return _mapper.Map<Prestamo, PrestamoDto>(prestamo);
+        }
+
+        public async Task<UsuarioDto> ExistUsuario(PrestamoDto prestamoDto)
+        {
+            Prestamo prestamo = _mapper.Map<PrestamoDto, Prestamo>(prestamoDto);
+            
+                var usuario = await _db.Usuarios.Where(e => e.Cedula == prestamoDto.Cedula).FirstOrDefaultAsync();
+                if (usuario == null)
+                {
+
+                }
+            
+            return _mapper.Map<UsuarioDto>(usuario);
         }
 
         public async Task<bool> DeletePrestamo(int id)

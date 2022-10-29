@@ -123,6 +123,13 @@ namespace Biblioteca_modular.Controllers
         [HttpPost("crearprestamo")]
         public async Task<ActionResult<Prestamo>> PostPrestamo(PrestamoDto prestamoDto)
         {
+            var usuario = await _prestamoRepositorio.ExistUsuario(prestamoDto);
+            if (usuario == null)
+            {
+                _response.IsSuccess = false;
+                _response.DisplayMessage = "usuario no existe";
+                return NotFound(_response);
+            }
             try
             {
                 PrestamoDto model = await _prestamoRepositorio.CreateUpdate(prestamoDto);
