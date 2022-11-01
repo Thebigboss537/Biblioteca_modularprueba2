@@ -16,7 +16,7 @@ namespace Biblioteca_modular.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "1")]
+    [Authorize(Roles = "1, 4")]
     public class SedesController : ControllerBase
     {
         private readonly ISedeRepositorio _SedeRepositorio;
